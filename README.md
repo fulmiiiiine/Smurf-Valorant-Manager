@@ -124,7 +124,7 @@ python main.py
 | :--- | :--- | :--- |
 | `/status` | Displays system health, uptime, next update countdown, and module status. | Admin |
 | `/forceupdate` | Triggers an immediate API fetch for all users and updates the leaderboard. | Admin |
-| `/fastcodice` | Forces an immediate IMAP check for Riot codes (last 24h scan). | Admin |
+| `/fastcode` | Forces an immediate IMAP check for Riot codes (last 24h scan). | Admin |
 | `/forcewatchdog` | Manually triggers the system integrity check to verify loops are running. | Admin |
 | `/restart` | Restarts the background tasks (Update/Email loops) without killing the process. | Admin |
 | `/sync` | Manually syncs slash commands globally. | Admin |
@@ -142,5 +142,6 @@ This project is open-source for educational purposes.
 * **Attribution Required:** If you use, fork, or modify this code for your own projects, videos, or repositories, you **MUST** provide clear credit and a link back to this repository.
 * **No Plagiarism:** Claiming this code as your own without proper attribution is strictly prohibited.
 * **Support:** If this project helped you, consider starring the repository ⭐.
+
 
 
