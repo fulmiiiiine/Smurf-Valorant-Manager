@@ -20,15 +20,16 @@ Designed to be hosted on cloud platforms (Render, Railway, Replit) or local serv
 
 ## 📸 Screenshots
 
-| Rank Card | Server Leaderboard |
-| :---: | :---: |
-| ![Rank Card](assets/card_preview.png) | ![Leaderboard](assets/leaderboard_preview.png) |
-| *Auto-generated dynamic cards* | *Live updating leaderboard* |
+| Rank Card | Server Leaderboard | 2FA Codes Interceptor |
+| :---: | :---: | :---: |
+| ![Rank Card](assets/card_preview.png) | ![Leaderboard](assets/leaderboard_preview.png) | ![Codes](assets/codes_preview.png) |
+| *Auto-generated dynamic cards* | *Live updating leaderboard* | *Instant 2FA forwarding* |
 
 > **Setup Instructions for Images:**
 > 1. Create a folder named `assets` in your repository.
 > 2. Upload your screenshot named `card_preview.png` inside it.
 > 3. Upload your screenshot named `leaderboard_preview.png` inside it.
+> 4. Upload your screenshot named `codes_preview.png` inside it.
 
 ## 🛠️ Prerequisites
 
