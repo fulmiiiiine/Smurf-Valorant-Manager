@@ -131,7 +131,7 @@ python main.py
 
 ## 🛡️ Disclaimer
 
-This project is not affiliated with Riot Games or Discord. Usage of automated bots to interact with accounts may violate Terms of Service. Use at your own risk.
+This project is not affiliated with Riot Games or HenrikDev. Usage of automated bots to interact with accounts may violate Terms of Service. Use at your own risk.
 
 **Security Warning:** This bot handles sensitive data (API keys, Email credentials). **Ensure `config.json` is added to your `.gitignore` and never shared publicly.**
 
@@ -142,6 +142,7 @@ This project is open-source for educational purposes.
 * **Attribution Required:** If you use, fork, or modify this code for your own projects, videos, or repositories, you **MUST** provide clear credit and a link back to this repository.
 * **No Plagiarism:** Claiming this code as your own without proper attribution is strictly prohibited.
 * **Support:** If this project helped you, consider starring the repository ⭐.
+
 
 
 
