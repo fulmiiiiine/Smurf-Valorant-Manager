@@ -1,6 +1,3 @@
-
-
-README_CONTENT = r"""
 # Valorant Tracker & 2FA Manager Bot 🔫
 
 A ruthless, automated Discord assistant for competitive Valorant players. This bot tracks MMR/Elo changes in real-time, generates high-quality visual rank cards, manages server leaderboards, and **intercepts Riot Games 2FA codes directly from your Gmail**, forwarding them to a private Discord channel.
@@ -140,4 +137,5 @@ This project is open-source for educational purposes.
 
 if __name__ == "__main__":
     print(README_CONTENT)
+
 
