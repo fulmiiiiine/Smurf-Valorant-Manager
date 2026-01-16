@@ -1,0 +1,94 @@
+{
+    "discord_token": "YOUR_DISCORD_BOT_TOKEN_HERE",
+    "admin_user_id": 0,
+    "channels": {
+        "main_channel_id": 0,
+        "leaderboard_channel_id": 0,
+        "error_log_channel_id": 0,
+        "codes_channel_id": 0
+    },
+    "guilds": {
+        "auth_guild_id": 0
+    },
+    "api": {
+        "keys": [
+            "YOUR_API_KEY_1",
+            "YOUR_API_KEY_2"
+        ],
+        "region": "eu"
+    },
+    "email": {
+        "address": "your_email@gmail.com",
+        "password": "your_app_password",
+        "imap_server": "imap.gmail.com",
+        "imap_port": 993,
+        "check_interval": 10,
+        "code_max_age_minutes": 15
+    },
+    "messages": {
+        "leaderboard_message_id": 0,
+        "hardcoded_slot_ids": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "text": {
+            "access_denied": "❌ Access Denied: You must be in the official server to use this bot.",
+            "bot_connected": "✅ Bot connected as {user} (ID: {user_id})",
+            "commands_synced": "✅ Slash commands synced and ready to use",
+            "commands_not_synced": "⚠️ Slash commands might not be synced",
+            "channel_not_found": "❌ Channel ID {channel_id} not found",
+            "crash_alert": "🚨 **CRASH DETECTED IN {source}** 🚨\n```python\n{traceback}\n```",
+            "crash_alert_fallback": "⚠️ <@{admin_id}> CRITICAL CRASH IN {source} BUT UNABLE TO SEND TEXT.",
+            "only_admin": "❌ Only admin can use this command!",
+            "update_manual_started": "🚀 Manual update started!",
+            "update_already_in_progress": "⚠️ Update already in progress, please wait...",
+            "update_success": "✅ Forced update completed successfully!",
+            "update_failed": "❌ Forced update failed. Check logs.",
+            "no_code_found": "❌ No *valid* code (max 15 min) found. Channel has been notified.",
+            "no_code_found_embed_desc": "**No code found**\n\nNo valid code email in the last 24h.",
+            "leaderboard_header": "🏆 SERVER LEADERBOARD",
+            "leaderboard_footer": "Riot Games Codes Bot"
+        }
+    },
+    "file_paths": {
+        "cache_file": "message_cache.json",
+        "codes_history_file": "codes_history.json",
+        "log_file": "valorant_tracker.log"
+    },
+    "settings": {
+        "card_width": 550,
+        "card_height": 160,
+        "update_interval": 1800
+    },
+    "rank_colors": {
+        "UNRANKED": "#7289DA",
+        "IRON": "#5D5D5D",
+        "BRONZE": "#8C523A",
+        "SILVER": "#80989D",
+        "GOLD": "#D4AF37",
+        "PLATINUM": "#4FD1E5",
+        "DIAMOND": "#3498DB",
+        "ASCENDANT": "#9B59B6",
+        "IMMORTAL": "#E74C3C",
+        "RADIANT": "#F1C40F",
+        "ERROR": "#E74C3C"
+    },
+    "users": [
+        {
+            "puuid": "user-puuid-here",
+            "name": "Username#TAG",
+            "login": "riot_account_username",
+            "password": "riot_account_password",
+            "color": "#FF6B6B",
+            "agent": "https://static.wikia.nocookie.net/valorant/images/3/35/Jett_icon.png/revision/latest?cb=20230909031447"
+        }
+    ]
+}
