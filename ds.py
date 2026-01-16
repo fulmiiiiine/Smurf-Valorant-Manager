@@ -251,7 +251,7 @@ class FontManager:
             self.card_small = ImageFont.truetype("fonts/arial.ttf", 12)
             self.card_ban = ImageFont.truetype("fonts/arialbd.ttf", 14)
         except:
-            logger.warning("⚠️ Font Arial non trovati, uso default.")
+            logger.warning("⚠️ Arial fonts not found, using default.")
             self.header = ImageFont.load_default()
             self.name = ImageFont.load_default()
             self.stats = ImageFont.load_default()
@@ -332,7 +332,7 @@ def create_leaderboard_image(users_data_list):
                     
                     img.paste(user['rank_icon'], (icon_x, y + 8), user['rank_icon'])
                 except Exception as e:
-                    logger.error(f"Err icona leaderboard {user['name']}: {e}")
+                    logger.error(f"Leaderboard icon error {user['name']}: {e}")
             
             
             name_x = 170
@@ -403,7 +403,7 @@ def create_rank_card(user_data, rank_name="ERROR", elo=0, ranking_in_tier=0, ran
             border_img.paste(agent_circle, (border_size, border_size), agent_circle)
             base.paste(border_img, (20, (CARD_HEIGHT - 80 - border_size*2) // 2), border_img)
         except Exception as e:
-            logger.error(f"Errore processamento immagine agent: {e}")
+            logger.error(f"Agent image processing error: {e}")
     
     
     
@@ -426,7 +426,7 @@ def create_rank_card(user_data, rank_name="ERROR", elo=0, ranking_in_tier=0, ran
             
             base.paste(rank_img, (CARD_WIDTH - 80, (CARD_HEIGHT - 70) // 2), rank_img)
         except Exception as e:
-            logger.error(f"Errore processamento icona rank: {e}")
+            logger.error(f"Rank icon processing error: {e}")
     elif rank_name in ("ERROR", "UNRANKED"):
         try:
             unrated_icon = Image.new('RGBA', (70,70), (0,0,0,0))
@@ -435,7 +435,7 @@ def create_rank_card(user_data, rank_name="ERROR", elo=0, ranking_in_tier=0, ran
             unrated_draw.text((30,25), "?", fill=rank_color, font=FONTS.card_large)
             base.paste(unrated_icon, (CARD_WIDTH - 80, (CARD_HEIGHT - 70)//2), unrated_icon)
         except Exception as e:
-            logger.error(f"Errore creazione icona unrated: {e}")
+            logger.error(f"Unrated icon creation error: {e}")
     
     
     
@@ -604,10 +604,10 @@ class ValorantBot(commands.Bot):
             if os.path.exists(CACHE_FILE):
                 with open(CACHE_FILE, 'r') as f:
                     data = json.load(f)
-                    logger.info("✅ Cache messaggi caricata da file")
+                    logger.info("✅ Message cache loaded from file")
                     return data
         except Exception as e:
-            logger.error(f"❌ Errore caricamento cache: {e}")
+            logger.error(f"❌ Cache loading error: {e}")
         return {}
     
     def save_message_cache(self):
@@ -615,9 +615,9 @@ class ValorantBot(commands.Bot):
         try:
             with open(CACHE_FILE, 'w') as f:
                 json.dump(self.message_cache, f)
-                logger.info("✅ Cache messaggi salvata su file")
+                logger.info("✅ Message cache saved to file")
         except Exception as e:
-            logger.error(f"❌ Errore salvataggio cache: {e}")
+            logger.error(f"❌ Cache saving error: {e}")
     
     
     def load_codes_history(self):
@@ -627,10 +627,10 @@ class ValorantBot(commands.Bot):
                 with open(CODES_HISTORY_FILE, 'r') as f:
                     data = json.load(f)
                     
-                    logger.info(f"✅ Storico codici caricato ({len(data)} codici)")
+                    logger.info(f"✅ Code history loaded ({len(data)} codes)")
                     return set(data)
         except Exception as e:
-            logger.error(f"❌ Errore caricamento storico codici: {e}")
+            logger.error(f"❌ Code history loading error: {e}")
         return set()
 
     def save_code_to_history(self, code):
@@ -640,9 +640,9 @@ class ValorantBot(commands.Bot):
             
             with open(CODES_HISTORY_FILE, 'w') as f:
                 json.dump(list(self.codes_history), f)
-            logger.info(f"💾 Codice {code} salvato nello storico JSON")
+            logger.info(f"💾 Code {code} saved to JSON history")
         except Exception as e:
-            logger.error(f"❌ Errore salvataggio storico codici: {e}")
+            logger.error(f"❌ Code history saving error: {e}")
 
     def get_user_message_id(self, puuid):
         return self.message_cache.get(puuid)
@@ -653,16 +653,16 @@ class ValorantBot(commands.Bot):
     
     async def setup_hook(self):
         
-        logger.info("🔧 Esecuzione setup hook...")
+        logger.info("🔧 Executing setup hook...")
         
         
         if self.session is None or getattr(self.session, "closed", False):
             self.session = aiohttp.ClientSession()
-            logger.info("✅ Sessione HTTP creata")
+            logger.info("✅ HTTP session created")
         
         
         try:
-            logger.info("🔄 Avvio sincronizzazione comandi slash GLOBALE...")
+            logger.info("🔄 Starting GLOBAL slash command sync...")
             
             
             if GUILD_ID:
@@ -671,11 +671,11 @@ class ValorantBot(commands.Bot):
 
             
             synced = await self.tree.sync()
-            logger.info(f"✅ {len(synced)} comandi sincronizzati GLOBALMENTE.")
+            logger.info(f"✅ {len(synced)} commands synced GLOBALLY.")
             self.commands_synced = True
                     
         except Exception as e:
-            logger.error(f"❌ Errore critico durante sync: {e}")
+            logger.error(f"❌ Critical error during sync: {e}")
     
     async def on_ready(self):
         
@@ -683,22 +683,22 @@ class ValorantBot(commands.Bot):
         
         
         if self.commands_synced:
-            logger.info("✅ Comandi slash sincronizzati e pronti all'uso")
+            logger.info("✅ Slash commands synced and ready to use")
         else:
-            logger.warning("⚠️ Comandi slash potrebbero non essere sincronizzati")
+            logger.warning("⚠️ Slash commands might not be synced")
         
         
         self.channel = self.get_channel(CHANNEL_ID)
         self.codes_channel = self.get_channel(CODES_CHANNEL_ID)
         
         if not self.channel:
-            logger.error(f"❌ Canale ID {CHANNEL_ID} non trovato")
+            logger.error(f"❌ Channel ID {CHANNEL_ID} not found")
             return
         
         if not self.codes_channel:
-            logger.error(f"❌ Canale codici ID {CODES_CHANNEL_ID} non trovato")
+            logger.error(f"❌ Codes channel ID {CODES_CHANNEL_ID} not found")
         else:
-            logger.info(f"✅ Canale codici configurato: {self.codes_channel.name}")
+            logger.info(f"✅ Codes channel configured: {self.codes_channel.name}")
         
         
         await self.initialize_hardcoded_cache()
@@ -712,7 +712,7 @@ class ValorantBot(commands.Bot):
         
         if not self.watchdog_task or self.watchdog_task.done():
             self.watchdog_task = self.watchdog_loop.start()
-            logger.info("🐕 Watchdog Supervisor avviato!")
+            logger.info("🐕 Watchdog Supervisor started!")
     
     async def initialize_hardcoded_cache(self):
         
@@ -722,32 +722,32 @@ class ValorantBot(commands.Bot):
                 if i < len(HARDCODED_MESSAGE_IDS):
                     self.message_cache[user['puuid']] = HARDCODED_MESSAGE_IDS[i]
             self.save_message_cache()
-            logger.info("✅ Cache inizializzata con IDs hardcoded")
+            logger.info("✅ Cache initialized with hardcoded IDs")
     
     async def preload_message_cache(self):
         
         if not self.channel:
             return
             
-        logger.info("🔍 Verifica cache messaggi...")
+        logger.info("🔍 Verifying message cache...")
         to_delete = []
         
         for puuid, msg_id in list(self.message_cache.items()):
             try:
                 await self.channel.fetch_message(msg_id)
-                logger.info(f"✅ Messaggio {msg_id} trovato per PUUID {puuid}")
+                logger.info(f"✅ Message {msg_id} found for PUUID {puuid}")
             except discord.NotFound:
-                logger.warning(f"⚠️ Messaggio {msg_id} non trovato - sarà ricreato")
+                logger.warning(f"⚠️ Message {msg_id} not found - will be recreated")
                 to_delete.append(puuid)
             except Exception as e:
-                logger.warning(f"⚠️ Errore verifica messaggio {msg_id}: {e}")
+                logger.warning(f"⚠️ Message {msg_id} verification error: {e}")
         
         for puuid in to_delete:
             self.message_cache.pop(puuid, None)
         
         if to_delete:
             self.save_message_cache()
-            logger.info("✅ Cache aggiornata dopo verifica")
+            logger.info("✅ Cache updated after verification")
 
     
     async def send_crash_log(self, source, error):
@@ -755,7 +755,7 @@ class ValorantBot(commands.Bot):
         try:
             error_channel = self.get_channel(ERROR_LOG_CHANNEL_ID)
             if not error_channel:
-                logger.critical(f"❌ Canale Log Errori {ERROR_LOG_CHANNEL_ID} non trovato!")
+                logger.critical(f"❌ Error Log Channel {ERROR_LOG_CHANNEL_ID} not found!")
                 return
 
             
@@ -773,7 +773,7 @@ class ValorantBot(commands.Bot):
                 await error_channel.send(msg)
             except Exception:
                 
-                await error_channel.send(f"⚠️ <@{ADMIN_USER_ID}> CRASH CRITICO IN {source} MA IMPOSSIBILE INVIARE TESTO.")
+                await error_channel.send(f"⚠️ <@{ADMIN_USER_ID}> CRITICAL CRASH IN {source} BUT UNABLE TO SEND TEXT.")
                 
                 
                 try:
@@ -781,16 +781,16 @@ class ValorantBot(commands.Bot):
                     file = discord.File(BytesIO(full_tb.encode('utf-8')), filename="crash_log_full.txt")
                     await error_channel.send(file=file)
                 except Exception as file_err:
-                    logger.critical(f"Impossibile inviare nemmeno il file di log: {file_err}")
+                    logger.critical(f"Unable to send even log file: {file_err}")
 
         except Exception as e:
             
-            logger.critical(f"IMPOSSIBILE INVIARE CRASH LOG A DISCORD: {e}")
+            logger.critical(f"UNABLE TO SEND CRASH LOG TO DISCORD: {e}")
             traceback.print_exc()
 
     def start_background_tasks(self):
         
-        logger.info("🚀 Avvio task in background...")
+        logger.info("🚀 Starting background tasks...")
         
         
         if not self.update_task or self.update_task.done():
@@ -801,12 +801,12 @@ class ValorantBot(commands.Bot):
             if not self.email_task or self.email_task.done():
                 self.email_task = asyncio.create_task(self.email_loop_with_restart())
         else:
-            logger.warning("⚠️ Credenziali Gmail non configurate")
+            logger.warning("⚠️ Gmail credentials not configured")
 
         
         if not self.watchdog_task or self.watchdog_task.done():
             self.watchdog_task = self.watchdog_loop.start()
-            logger.info("🐕 Watchdog Supervisor avviato da start_background_tasks")
+            logger.info("🐕 Watchdog Supervisor started from start_background_tasks")
 
     def restart_update_timer(self):
         
@@ -817,18 +817,18 @@ class ValorantBot(commands.Bot):
             self.is_updating = False 
             if self.update_task and not self.update_task.done():
                 self.update_task.cancel()
-                logger.info("⏹️ Update task cancellato per riavvio timer")
+                logger.info("⏹️ Update task cancelled for timer restart")
         except Exception as e:
-            logger.error(f"❌ Errore cancellazione update task: {e}")
+            logger.error(f"❌ Update task cancellation error: {e}")
         
         self.update_task = asyncio.create_task(self.update_loop_with_restart())
-        logger.info("✅ Timer di aggiornamento riavviato (countdown ripartito)")
+        logger.info("✅ Update timer restarted (countdown restarted)")
 
     
     def get_next_update_countdown(self):
         
         if not self.next_update_time:
-            return "Sconosciuto"
+            return "Unknown"
         
         current_time = time.time()
         remaining_time = max(0, self.next_update_time - current_time)
@@ -855,23 +855,23 @@ class ValorantBot(commands.Bot):
                         return await response.json()
                     elif response.status == 429:
                         self.rotate_api_key()
-                        logger.warning(f"⚠️ 429 Rate Limit su {description}. Tentativo {i+1}/{max_retries}. Ruoto Key...")
+                        logger.warning(f"⚠️ 429 Rate Limit on {description}. Attempt {i+1}/{max_retries}. key...")
                         await asyncio.sleep(0.5) 
                         continue 
                     elif response.status == 404:
                          logger.warning(f"❌ 404 Not Found su {description}")
                          return None
                     else:
-                        logger.error(f"❌ Errore {response.status} su {description}")
+                        logger.error(f"❌ Error {response.status} on {description}")
                         return None
             except asyncio.TimeoutError:
                 logger.error(f"❌ Timeout su {description}")
                 return None
             except Exception as e:
-                logger.error(f"❌ Eccezione su {description}: {e}")
+                logger.error(f"❌ Exception on {description}: {e}")
                 return None
         
-        logger.error(f"❌ Falliti tutti i retry per {description}")
+        logger.error(f"❌ All retries failed for {description}")
         return None
 
     
@@ -881,15 +881,15 @@ class ValorantBot(commands.Bot):
             try:
                 await self.update_loop()
             except asyncio.CancelledError:
-                logger.info("Update Loop Cancellato manualmente.")
+                logger.info("Update Loop Cancelled manually.")
                 
                 self.is_updating = False
                 break 
             except Exception as e:
-                logger.error(f"❌ CRASH Update Loop: {e}")
+                logger.error(f"❌ UPDATE LOOP CRASH: {e}")
                 self.is_updating = False 
                 await self.send_crash_log("UPDATE LOOP", e)
-                logger.info("🔄 Resurrezione Update Loop in 60 secondi...")
+                logger.info("🔄 Resurrecting Update Loop in 60 seconds...")
                 await asyncio.sleep(60)
     
     
@@ -899,12 +899,12 @@ class ValorantBot(commands.Bot):
             try:
                 await self.check_email_for_codes()
             except asyncio.CancelledError:
-                logger.info("Email Loop Cancellato manualmente.")
+                logger.info("Email Loop Cancelled manually.")
                 break
             except Exception as e:
-                logger.error(f"❌ CRASH Email Loop: {e}")
+                logger.error(f"❌ EMAIL LOOP CRASH: {e}")
                 await self.send_crash_log("EMAIL LOOP", e)
-                logger.info("🔄 Resurrezione Email Loop in 60 secondi...")
+                logger.info("🔄 Resurrecting Email Loop in 60 seconds...")
                 self.email_client = None 
                 await asyncio.sleep(60)
 
@@ -933,15 +933,15 @@ class ValorantBot(commands.Bot):
             self.watchdog_metrics['update_restarts'] += 1
             
             
-            exc_msg = "Nessuna eccezione registrata."
+            exc_msg = "No exception recorded."
             if self.update_task and self.update_task.done():
                 try:
                     exc = self.update_task.exception()
                     if exc: exc_msg = f"{type(exc).__name__}: {exc}"
                 except: pass
             
-            update_detail = f"Task Crashato. Err: {exc_msg}"
-            repaired_actions.append(f"🛠️ **Update Loop**: Riavviato (Crash #{self.watchdog_metrics['update_restarts']})")
+            update_detail = f"Task Crashed. Err: {exc_msg}"
+            repaired_actions.append(f"🛠️ **Update Loop**: Restarted (Crash #{self.watchdog_metrics['update_restarts']})")
             
             
             self.is_updating = False
@@ -954,8 +954,8 @@ class ValorantBot(commands.Bot):
             self.watchdog_metrics['update_restarts'] += 1
             
             overdue_sec = int(time.time() - self.next_update_time)
-            update_detail = f"Loop bloccato da {overdue_sec}s"
-            repaired_actions.append(f"🔨 **Update Loop**: Kill & Riavvio forzato (Stuck)")
+            update_detail = f"Loop stuck for {overdue_sec}s"
+            repaired_actions.append(f"🔨 **Update Loop**: Kill & Forced Restart (Stuck)")
             
             
             if self.update_task: self.update_task.cancel()
@@ -968,9 +968,9 @@ class ValorantBot(commands.Bot):
             
             if self.next_update_time:
                 remaining = int(self.next_update_time - time.time())
-                update_detail = f"Prossimo ciclo in {remaining // 60}m {remaining % 60}s"
+                update_detail = f"Next cycle in {remaining // 60}m {remaining % 60}s"
             else:
-                update_detail = "In attesa di schedulazione"
+                update_detail = "Waiting for scheduling"
 
         
         email_state = "UNKNOWN"
@@ -982,7 +982,7 @@ class ValorantBot(commands.Bot):
                 email_state = "DEAD 💀"
                 issues_found = True
                 self.watchdog_metrics['email_restarts'] += 1
-                repaired_actions.append(f"🛠️ **Email Loop**: Riavviato (Crash #{self.watchdog_metrics['email_restarts']})")
+                repaired_actions.append(f"🛠️ **Email Loop**: Restarted (Crash #{self.watchdog_metrics['email_restarts']})")
                 
                 
                 self.email_task = asyncio.create_task(self.email_loop_with_restart())
@@ -994,8 +994,8 @@ class ValorantBot(commands.Bot):
                 self.watchdog_metrics['email_restarts'] += 1
                 
                 frozen_sec = int(time.time() - self.last_email_check_time)
-                email_detail = f"Heartbeat fermo da {frozen_sec}s"
-                repaired_actions.append(f"🔨 **Email Loop**: Riavvio forzato (Frozen)")
+                email_detail = f"Heartbeat stopped for {frozen_sec}s"
+                repaired_actions.append(f"🔨 **Email Loop**: Forced Restart (Frozen)")
                 
                 
                 if self.email_task: self.email_task.cancel()
@@ -1005,10 +1005,10 @@ class ValorantBot(commands.Bot):
                 email_state = "OPERATIONAL 🟢"
                 if self.last_email_check_time > 0:
                      ago = int(time.time() - self.last_email_check_time)
-                     email_detail = f"Ultimo heartbeat: {ago}s fa"
+                     email_detail = f"Last heartbeat: {ago}s ago"
         else:
             email_state = "DISABLED ⚪"
-            email_detail = "Credenziali non configurate"
+            email_detail = "Credentials not configured"
 
         
         latency_str = f"{self.watchdog_metrics['last_latency']} ms"
@@ -1081,11 +1081,11 @@ class ValorantBot(commands.Bot):
             except discord.HTTPException as e:
                 if e.status == 429:  
                     retry_after = getattr(e, 'retry_after', None) or 2.0
-                    logger.warning(f"⚠️ Rate limit, attesa {retry_after}s (tentativo {attempt+1}/{max_retries})")
+                    logger.warning(f"⚠️ Rate limit, waiting {retry_after}s (attempt {attempt+1}/{max_retries})")
                     await asyncio.sleep(min(retry_after * 1.5, 30))  
                     continue
                 elif e.status >= 500:  
-                    logger.warning(f"⚠️ Errore server Discord {e.status}, retry in {2**(attempt+1)}s")
+                    logger.warning(f"⚠️ Discord server error {e.status}, retry in {2**(attempt+1)}s")
                     await asyncio.sleep(2**(attempt+1))
                     continue
                 else:
@@ -1093,10 +1093,10 @@ class ValorantBot(commands.Bot):
             except Exception as e:
                 if attempt == max_retries - 1:
                     raise
-                logger.warning(f"⚠️ Errore richiesta Discord: {e}, retry in {2**(attempt+1)}s")
+                logger.warning(f"⚠️ Discord request error: {e}, retry in {2**(attempt+1)}s")
                 await asyncio.sleep(2**(attempt+1))
         
-        raise Exception(f"Fallimento dopo {max_retries} tentativi")
+        raise Exception(f"Failure after {max_retries} attempts")
     
     async def get_valorant_rank(self, puuid, name="User"):
         
@@ -1113,7 +1113,7 @@ class ValorantBot(commands.Bot):
             ranking_in_tier = current_data.get('ranking_in_tier', 0)
             current_tier = current_data.get('currenttier', 0) 
             
-            logger.info(f"Dati estratti - Rank: {rank_name}, Tier: {current_tier}, RR: {ranking_in_tier}, Elo: {elo}")
+            logger.info(f"Data extracted - Rank: {rank_name}, Tier: {current_tier}, RR: {ranking_in_tier}, Elo: {elo}")
             return rank_name, icon_url, elo, ranking_in_tier, current_tier
             
         
@@ -1128,7 +1128,7 @@ class ValorantBot(commands.Bot):
                  rank_name, elo, ranking_in_tier = cached_sig[0], cached_sig[1], cached_sig[2]
                  current_tier = 0 
                  
-            logger.info(f"🛡️ Graceful Degradation attiva per {puuid}: Uso dati cache ({rank_name})")
+            logger.info(f"🛡️ Graceful Degradation active for {puuid}: Using cache data ({rank_name})")
             
             return rank_name, None, elo, ranking_in_tier, current_tier
         
@@ -1151,21 +1151,21 @@ class ValorantBot(commands.Bot):
                         agent_name = p.get('character', 'Unknown')
                         
                         agent_icon = p.get('assets', {}).get('agent', {}).get('small')
-                        logger.info(f"🕵️ Last Agent per {puuid}: {agent_name}")
+                        logger.info(f"🕵️ Last Agent for {puuid}: {agent_name}")
                         return agent_name, agent_icon
                             
         return None, None
 
     async def get_account_level(self, puuid):
         
-        logger.debug(f"🔍 get_account_level chiamato per {puuid}")
+        logger.debug(f"🔍 get_account_level called for {puuid}")
         url = f'https://api.henrikdev.xyz/valorant/v2/by-puuid/account/{puuid}'
         
         data = await self.fetch_with_retry(url, f"get_account_level({puuid})")
         
         if data:
             account_level = data.get('data', {}).get('account_level', 0)
-            logger.info(f"Livello account per {puuid}: {account_level}")
+            logger.info(f"Account level for {puuid}: {account_level}")
             return account_level
             
         return 0
@@ -1177,10 +1177,10 @@ class ValorantBot(commands.Bot):
                 if response.status == 200:
                     return BytesIO(await response.read())
                 else:
-                    logger.error(f"Fallimento download immagine da {url} - status {response.status}")
+                    logger.error(f"Image download failure from {url} - status {response.status}")
                     return None
         except Exception as e:
-            logger.error(f"Errore download immagine: {e}")
+            logger.error(f"Image download error: {e}")
             return None
 
     
@@ -1223,22 +1223,22 @@ class ValorantBot(commands.Bot):
                             minutes_left = int((remaining_time.total_seconds() % 3600) // 60)
                             
                             active_bans[target_user['puuid']] = f"⛔ BANNED: {hours_left}h {minutes_left}m"
-                            logger.info(f"🚨 Ban attivo trovato per {target_user['name']}: {hours_left}h {minutes_left}m rimanenti")
+                            logger.info(f"🚨 Active ban found for {target_user['name']}: {hours_left}h {minutes_left}m remaining")
                         else:
                             
-                            logger.info(f"🗑️ Ban scaduto per {target_user['name']}, elimino messaggio...")
+                            logger.info(f"🗑️ Expired ban for {target_user['name']}, deleting message...")
                             messages_to_delete.append(message)
             
             
             for msg in messages_to_delete:
                 try:
                     await msg.delete()
-                    logger.info("✅ Messaggio ban scaduto eliminato.")
+                    logger.info("✅ Expired ban message deleted.")
                 except Exception as e:
-                    logger.error(f"❌ Errore eliminazione messaggio ban: {e}")
+                    logger.error(f"❌ Ban message deletion error: {e}")
                     
         except Exception as e:
-            logger.error(f"❌ Errore durante il check dei ban: {e}")
+            logger.error(f"❌ Error during ban check: {e}")
             
         return active_bans
 
@@ -1277,50 +1277,50 @@ class ValorantBot(commands.Bot):
                     
                     try:
                         await self.safe_discord_request(message.edit, content=message_content, attachments=[file])
-                        logger.info(f"✅ Modificato messaggio per {user_data['name']} (id {message_id})")
+                        logger.info(f"✅ Modified message for {user_data['name']} (id {message_id})")
                         return message_id
                     except Exception as e_edit:
                         
-                        logger.warning(f"⚠️ Modifica attachment fallita per {message_id}: {e_edit}. Ricreazione messaggio.")
+                        logger.warning(f"⚠️ Attachment edit failed for {message_id}: {e_edit}. Recreating message.")
                         try:
                             await self.safe_discord_request(message.delete)
                         except Exception:
                             pass
                         new_msg = await self.safe_discord_request(self.channel.send, content=message_content, file=file)
                         self.set_user_message_id(user_data['puuid'], new_msg.id)
-                        logger.info(f"✅ Ricreato messaggio per {user_data['name']} (nuovo id {new_msg.id})")
+                        logger.info(f"✅ Recreated message for {user_data['name']} (new id {new_msg.id})")
                         return new_msg.id
                 except discord.NotFound:
-                    logger.warning(f"⚠️ Messaggio id {message_id} non trovato per {user_data['name']}, invio nuovo.")
+                    logger.warning(f"⚠️ Message id {message_id} not found for {user_data['name']}, sending new.")
                 except discord.Forbidden:
-                    logger.error(f"❌ Errore permessi modifica messaggio per {user_data['name']}")
+                    logger.error(f"❌ Permission error editing message for {user_data['name']}")
                 except Exception as e:
-                    logger.error(f"❌ Errore modifica messaggio per {user_data['name']}: {e}")
+                    logger.error(f"❌ Message edit error for {user_data['name']}: {e}")
             
             
             message = await self.safe_discord_request(self.channel.send, content=message_content, file=file)
-            logger.info(f"✅ Inviato nuovo messaggio per {user_data['name']} (id {message.id})")
+            logger.info(f"✅ Sent new message for {user_data['name']} (id {message.id})")
             return message.id
         except Exception as e:
-            logger.error(f"❌ Fallimento invio/modifica messaggio per {user_data['name']}: {e}")
+            logger.error(f"❌ Send/edit message failure for {user_data['name']}: {e}")
             return None
 
     
     async def update_leaderboard(self):
         
-        logger.info("🏆 Inizio aggiornamento Leaderboard...")
+        logger.info("🏆 Starting leaderboard update...")
         
         if not LEADERBOARD_CHANNEL_ID:
-            logger.warning("⚠️ LEADERBOARD_CHANNEL_ID non configurato.")
+            logger.warning("⚠️ LEADERBOARD_CHANNEL_ID not configured.")
             return
 
         if not self.users_data_cache:
-            logger.warning("⚠️ Cache utenti vuota, salto aggiornamento leaderboard.")
+            logger.warning("⚠️ User cache empty, skipping leaderboard update.")
             return
 
         channel = self.get_channel(LEADERBOARD_CHANNEL_ID)
         if not channel:
-            logger.error(f"❌ Canale Leaderboard {LEADERBOARD_CHANNEL_ID} non trovato!")
+            logger.error(f"❌ Leaderboard Channel {LEADERBOARD_CHANNEL_ID} not found!")
             return
 
         
@@ -1335,7 +1335,7 @@ class ValorantBot(commands.Bot):
         try:
             img_bio = await asyncio.to_thread(create_leaderboard_image, sorted_users)
         except Exception as e:
-            logger.error(f"❌ Errore generazione immagine leaderboard: {e}")
+            logger.error(f"❌ Leaderboard image generation error: {e}")
             return
 
         file = discord.File(img_bio, filename="leaderboard.png")
@@ -1347,32 +1347,32 @@ class ValorantBot(commands.Bot):
             try:
                 message = await channel.fetch_message(LEADERBOARD_MESSAGE_ID)
                 await message.edit(attachments=[file])
-                logger.info(f"✅ Leaderboard aggiornata (ID: {LEADERBOARD_MESSAGE_ID})")
+                logger.info(f"✅ Leaderboard updated (ID: {LEADERBOARD_MESSAGE_ID})")
                 message_sent = True
             except discord.NotFound:
-                logger.warning(f"⚠️ Messaggio Leaderboard {LEADERBOARD_MESSAGE_ID} non trovato. Ne creo uno nuovo.")
+                logger.warning(f"⚠️ Leaderboard Message {LEADERBOARD_MESSAGE_ID} not found. Creating a new one.")
             except Exception as e:
-                logger.error(f"❌ Errore edit leaderboard: {e}")
+                logger.error(f"❌ Leaderboard edit error: {e}")
 
         if not message_sent:
             try:
                 new_msg = await channel.send(file=file)
-                logger.critical(f"⚠️ NUOVO MESSAGGIO LEADERBOARD CREATO: ID {new_msg.id}")
-                logger.critical(f"⚠️ >>> AGGIORNARE LA COSTANTE 'LEADERBOARD_MESSAGE_ID' NEL CODICE CON: {new_msg.id} <<<")
+                logger.critical(f"⚠️ NEW LEADERBOARD MESSAGE CREATED: ID {new_msg.id}")
+                logger.critical(f"⚠️ >>> UPDATE THE 'LEADERBOARD_MESSAGE_ID' CONSTANT IN CODE WITH: {new_msg.id} <<<")
             except Exception as e:
-                logger.error(f"❌ Errore invio nuova leaderboard: {e}")
+                logger.error(f"❌ New leaderboard send error: {e}")
 
     async def update_all_users(self):
         
         if self.is_updating:
-            logger.warning("⚠️ Aggiornamento già in corso, skip")
+            logger.warning("⚠️ Update already in progress, skip")
             return False
         
         
         self.is_updating = True
         
         try:
-            logger.info("🔄 Inizio aggiornamento per tutti gli utenti")
+            logger.info("🔄 Starting update for all users")
             success_count = 0
 
             
@@ -1384,7 +1384,7 @@ class ValorantBot(commands.Bot):
             
             active_bans = {}
             if self.channel:
-                logger.info("🕵️ Controllo ban attivi nel canale...")
+                logger.info("🕵️ Checking active bans in channel...")
                 active_bans = await self.check_active_bans(self.channel)
 
             
@@ -1395,7 +1395,7 @@ class ValorantBot(commands.Bot):
                     
                     await asyncio.sleep(5)
                     
-                    logger.info(f"🔄 Fetching data per {user['name']} ({i+1}/{len(USERS)})...")
+                    logger.info(f"🔄 Fetching data for {user['name']} ({i+1}/{len(USERS)})...")
                     
                     
                     rank_name, icon_url, elo, ranking_in_tier, current_tier = await self.get_valorant_rank(user['puuid'], name=user['name'])
@@ -1422,9 +1422,9 @@ class ValorantBot(commands.Bot):
                     
                     if self.last_data_cache.get(user['puuid']) == data_signature:
                         needs_update = False
-                        logger.info(f"💤 Nessun cambiamento per {user['name']} (Agent: {last_agent_name})")
+                        logger.info(f"💤 No changes for {user['name']} (Agent: {last_agent_name})")
                     else:
-                        logger.info(f"🔄 Rilevato cambiamento per {user['name']} (Agent: {last_agent_name})")
+                        logger.info(f"🔄 Detected change for {user['name']} (Agent: {last_agent_name})")
                         self.last_data_cache[user['puuid']] = data_signature
                     
                     
@@ -1437,7 +1437,7 @@ class ValorantBot(commands.Bot):
                              rank_icon_card = await ASSETS.get_image(self.session, icon_url, width=70, height=70)
                              rank_icon_leaderboard = await ASSETS.get_image(self.session, icon_url, width=50, height=50)
                         except Exception as e:
-                            logger.error(f"Err download rank icon {user['name']}: {e}")
+                            logger.error(f"Rank icon download error {user['name']}: {e}")
 
                     
                     agent_img_card = None
@@ -1445,7 +1445,7 @@ class ValorantBot(commands.Bot):
                         try:
                             agent_img_card = await ASSETS.get_image(self.session, last_agent_icon_url, width=80, height=80)
                         except Exception as e:
-                            logger.error(f"Err download agent {user['name']}: {e}")
+                            logger.error(f"Agent download error {user['name']}: {e}")
                     
                     
                     user_data = user.copy()
@@ -1465,10 +1465,10 @@ class ValorantBot(commands.Bot):
                     
                     fetched_users.append(user_data)
                     
-                    logger.info(f"📊 Dati recuperati per {user['name']} - Tier: {current_tier} - ELO: {elo}")
+                    logger.info(f"📊 Data retrieved for {user['name']} - Tier: {current_tier} - ELO: {elo}")
 
                 except Exception as e:
-                    logger.error(f"❌ Errore fetch dati utente {user['name']}: {e}")
+                    logger.error(f"❌ User data fetch error {user['name']}: {e}")
                     
                     user_data = user.copy()
                     user_data.update({
@@ -1519,9 +1519,9 @@ class ValorantBot(commands.Bot):
                     
                     if i < len(HARDCODED_MESSAGE_IDS):
                         msg_id = HARDCODED_MESSAGE_IDS[i]
-                        logger.info(f"📍 User {user_data['name']} assegnato allo Slot #{i+1} (ID: {msg_id})")
+                        logger.info(f"📍 User {user_data['name']} assigned to Slot #{i+1} (ID: {msg_id})")
                     else:
-                        logger.warning(f"⚠️ Nessun slot disponibile per {user_data['name']} (Posizione {i+1})")
+                        logger.warning(f"⚠️ No slot available for {user_data['name']} (Position {i+1})")
                         continue
                     
                     
@@ -1540,29 +1540,29 @@ class ValorantBot(commands.Bot):
                         
                         
                         self.set_user_message_id(user_data['puuid'], msg_id)
-                        logger.info(f"✅ Slot {i+1} aggiornato con {user_data['name']}")
+                        logger.info(f"✅ Slot {i+1} updated with {user_data['name']}")
                             
                     except Exception as e:
-                        logger.error(f"Errore update message loop {user_data['name']}: {e}")
+                        logger.error(f"Update message loop error {user_data['name']}: {e}")
 
                 except Exception as e:
-                    logger.error(f"Errore ciclo finale update per {user_data['name']}: {e}")
+                    logger.error(f"Final update loop error for {user_data['name']}: {e}")
             
             
             
             if any_update:
                 await self.update_leaderboard()
             else:
-                logger.info("💤 Leaderboard skip update (nessun cambiamento)")
+                logger.info("💤 Leaderboard skip update (no changes)")
                     
-            logger.info(f"✅ Aggiornamento completato. Processati con successo {len(fetched_users)}/{len(USERS)} utenti")
+            logger.info(f"✅ Update completed. Successfully processed {len(fetched_users)}/{len(USERS)} users")
 
         except Exception as e:
-            logger.error(f"❌ CRASH Update Routine: {e}")
+            logger.error(f"❌ UPDATE ROUTINE CRASH: {e}")
             await self.send_crash_log("UPDATE ROUTINE", e)
         finally:
             self.is_updating = False
-            logger.info("🔓 Update Lock rilasciato.")
+            logger.info("🔓 Update Lock released.")
             
             
             jitter =  np.random.randint(0, 30)
@@ -1571,12 +1571,12 @@ class ValorantBot(commands.Bot):
             
             
             next_run_dt = datetime.now() + timedelta(seconds=wait_time)
-            logger.info(f"⏰ Prossimo aggiornamento in {wait_time // 3600}h {(wait_time % 3600) // 60}m (Jitter: {jitter}s)")
+            logger.info(f"⏰ Next update in {wait_time // 3600}h {(wait_time % 3600) // 60}m (Jitter: {jitter}s)")
 
     
     async def restore_state_from_discord(self):
         
-        logger.info("🧠 Avvio ripristino memoria da Discord (Zero-Storage Persistence)...")
+        logger.info("🧠 Starting memory restore from Discord (Zero-Storage Persistence)...")
         if not self.channel:
             return
 
@@ -1622,12 +1622,12 @@ class ValorantBot(commands.Bot):
                             self.set_user_message_id(target_user['puuid'], message.id)
                             
                             restored_count += 1
-                            logger.info(f"🧠 Memoria ripristinata per {user_name}: {rank_name} {elo}RR ({last_agent_name})")
+                            logger.info(f"🧠 Memory restored for {user_name}: {rank_name} {elo}RR ({last_agent_name})")
 
         except Exception as e:
-            logger.error(f"❌ Errore durante restore memory da Discord: {e}")
+            logger.error(f"❌ Error during memory restore from Discord: {e}")
 
-        logger.info(f"🧠 Ripristino completato. Recuperati {restored_count}/{len(USERS)} utenti.")
+        logger.info(f"🧠 Restore completed. Recovered {restored_count}/{len(USERS)} users.")
 
     async def update_loop(self):
         
@@ -1636,10 +1636,10 @@ class ValorantBot(commands.Bot):
         if not self.channel:
             try:
                 self.channel = await self.fetch_channel(CHANNEL_ID)
-                logger.info(f"✅ Canale recuperato via API: {self.channel}")
+                logger.info(f"✅ Channel retrieved via API: {self.channel}")
             except Exception as e:
-                logger.error(f"❌ Impossibile trovare canale {CHANNEL_ID}: {e}")
-                logger.warning("⚠️ Update loop in pausa per 60s prima di riprovare...")
+                logger.error(f"❌ Unable to find channel {CHANNEL_ID}: {e}")
+                logger.warning("⚠️ Update loop paused for 60s before retrying...")
                 await asyncio.sleep(60)
                 return
             
@@ -1649,10 +1649,10 @@ class ValorantBot(commands.Bot):
         
         
         if self.skip_initial_update:
-            logger.info("⏭️ Skip primo aggiornamento (riavvio post forceupdate)")
+            logger.info("⏭️ Skipping first update (restart after forceupdate)")
             self.skip_initial_update = False
         else:
-            logger.info("🚀 Primo aggiornamento all'avvio...")
+            logger.info("🚀 First update on startup...")
             await self.update_all_users()
         
         
@@ -1672,11 +1672,11 @@ class ValorantBot(commands.Bot):
             
             hours = int(sleep_time // 3600)
             minutes = int((sleep_time % 3600) // 60)
-            logger.info(f"⏰ Prossimo aggiornamento in {hours}h {minutes}m (Jitter: {int(jitter)}s)")
+            logger.info(f"⏰ Next update in {hours}h {minutes}m (Jitter: {int(jitter)}s)")
             
             await asyncio.sleep(sleep_time)
             
-            logger.info("🔄 Avvio aggiornamento programmato...")
+            logger.info("🔄 Starting scheduled update...")
             await self.update_all_users()
             
             
@@ -1688,7 +1688,7 @@ class ValorantBot(commands.Bot):
         try:
             return await asyncio.to_thread(self._connect_email_blocking)
         except Exception as e:
-            logger.error(f"❌ Errore connessione IMAP Gmail: {e}")
+            logger.error(f"❌ Gmail IMAP connection error: {e}")
             return None
 
     def _connect_email_blocking(self):
@@ -1697,7 +1697,7 @@ class ValorantBot(commands.Bot):
         client = IMAPClient(IMAP_SERVER, port=IMAP_PORT, ssl=True, ssl_context=ssl_context)
         client.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
         client.select_folder("INBOX")
-        logger.info("🔐 IMAP Gmail connesso per monitoraggio codici")
+        logger.info("🔐 Gmail IMAP connected for code monitoring")
         return client
 
     def extract_code(self, text: str) -> str | None:
@@ -1722,7 +1722,7 @@ class ValorantBot(commands.Bot):
             match = re.search(pattern, text, re.IGNORECASE)
             if match:
                 code = match.group(1)
-                logger.info(f"🔢 Codice autenticazione trovato con pattern '{pattern}': {code}")
+                logger.info(f"🔢 Authentication code found with pattern '{pattern}': {code}")
                 return code
         
         return None
@@ -1763,7 +1763,7 @@ class ValorantBot(commands.Bot):
         
         
         if any(re.search(pattern, text_lower) for pattern in exclude_patterns):
-            logger.info(f"🚫 Email ignorata - sembra essere un monitor/alert automatico")
+            logger.info(f"🚫 Email ignored - appears to be an automatic monitor/alert")
             return False
         
         return True
@@ -1781,19 +1781,19 @@ class ValorantBot(commands.Bot):
                 now_rome = datetime.now()
             
             embed = discord.Embed(
-                title="🎮 Nuovo Codice Riot Games Trovato!",
-                description=f"**🔢 Codice di Autenticazione:** `{code}`\n\n",
+                title="🎮 New Riot Games Code Found!",
+                description=f"**🔢 Authentication Code:** `{code}`\n\n",
                 color=0xA020F0,
                 timestamp=now_rome
             )
-            embed.set_footer(text="Bot Codici Riot Games", icon_url="https://i.imgur.com/Mrn3y3V.png")
+            embed.set_footer(text="Bot Codes Riot Games", icon_url="https://i.imgur.com/Mrn3y3V.png")
             embed.set_thumbnail(url="https://logos-world.net/wp-content/uploads/2020/10/Riot-Games-Logo.png")
             
             await self.codes_channel.send(embed=embed)
-            logger.info(f"✅ Codice Riot Games {code} inviato su Discord!")
+            logger.info(f"✅ Riot Games code {code} sent to Discord!")
             
         except Exception as e:
-            logger.error(f"❌ Errore invio codice su Discord: {e}")
+            logger.error(f"❌ Error sending code to Discord: {e}")
 
     
     async def check_email_once(self):
@@ -1817,7 +1817,7 @@ class ValorantBot(commands.Bot):
                 try:
                     uids = await asyncio.to_thread(self.email_client.search, ['SINCE', search_date_str])
                 except (imap_exceptions.IMAPClientError, ssl.SSLError, EOFError, OSError) as e:
-                    logger.error(f"❌ Errore ricerca email (connessione persa?): {e}")
+                    logger.error(f"❌ Email search error (connection lost?): {e}")
                     
                     try:
                         await asyncio.to_thread(self.email_client.logout)
@@ -1858,7 +1858,7 @@ class ValorantBot(commands.Bot):
                                 age_minutes = age.total_seconds() / 60
                                 
                                 if age_minutes > CODE_MAX_AGE_MINUTES:
-                                    logger.debug(f"⏳ Email ignorata perché vecchia di {int(age_minutes)} min")
+                                    logger.debug(f"⏳ Email ignored because it's {int(age_minutes)} min old")
                                     continue 
                             
                             
@@ -1888,20 +1888,20 @@ class ValorantBot(commands.Bot):
                                 code = body_code or subject_code
                                 
                                 if code:
-                                    logger.info(f"✅ Trovato codice valido e recente: {code}")
+                                    logger.info(f"✅ Found valid and recent code: {code}")
                                     return code
                                     
                         except Exception as e:
-                            logger.error(f"Errore parsing email {uid}: {e}")
+                            logger.error(f"Email parsing error {uid}: {e}")
                             
                             if "EOF" in str(e) or "socket" in str(e).lower():
-                                logger.error("💀 Socket moruto durante fetch, abort loop.")
+                                logger.error("💀 Socket died during fetch, abort loop.")
                                 self.email_client = None
                                 break
                             continue
                             
             except Exception as e:
-                logger.error(f"❌ Errore check_email_once (generico): {e}")
+                logger.error(f"❌ check_email_once error (generic): {e}")
                 
                 self.email_client = None 
         
@@ -1920,13 +1920,13 @@ class ValorantBot(commands.Bot):
             
             
             if code and code not in self.codes_history:
-                logger.info(f"🆕 NUOVO CODICE TROVATO: {code}")
+                logger.info(f"🆕 NEW CODE FOUND: {code}")
                 
                 self.save_code_to_history(code)
                 await self.send_code_to_discord(code)
             elif code:
                 
-                logger.debug(f"🔇 Codice {code} ignorato (già inviato in passato)")
+                logger.debug(f"🔇 Code {code} ignored (already sent in the past)")
                 
             await asyncio.sleep(CHECK_INTERVAL)
     
@@ -1940,18 +1940,18 @@ class RefreshView(discord.ui.View):
     async def refresh_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         
         if interaction.guild_id != AUTH_GUILD_ID:
-            return await interaction.response.send_message("❌ Comando non autorizzato in questo server.", ephemeral=True)
+            return await interaction.response.send_message("❌ Command not authorized in this server.", ephemeral=True)
             
         if self.bot.is_updating:
-            return await interaction.response.send_message("⚠️ Update già in corso, attendere...", ephemeral=True)
+            return await interaction.response.send_message("⚠️ Update already in progress, please wait...", ephemeral=True)
         
-        await interaction.response.send_message("🚀 Update manuale avviato!", ephemeral=True)
+        await interaction.response.send_message("🚀 Manual update started!", ephemeral=True)
         
         asyncio.create_task(self.bot.update_all_users())
 
     async def close(self):
         
-        logger.info("🔄 Chiusura bot...")
+        logger.info("🔄 Closing bot...")
         
         
         if self.update_task and not self.update_task.done():
@@ -1964,16 +1964,16 @@ class RefreshView(discord.ui.View):
         
         if self.session and not getattr(self.session, "closed", False):
             await self.session.close()
-            logger.info("✅ Sessione HTTP chiusa")
+            logger.info("✅ HTTP session closed")
         
         
         if self.email_client:
             try:
                 
                 await asyncio.to_thread(self.email_client.logout)
-                logger.info("✅ Client email chiuso")
+                logger.info("✅ Email client closed")
             except Exception as e:
-                logger.error(f"❌ Errore chiusura email: {e}")
+                logger.error(f"❌ Email closing error: {e}")
         
         await super().close()
 
@@ -1983,11 +1983,11 @@ bot = ValorantBot()
 
 
 
-@bot.tree.command(name="forcewatchdog", description="[ADMIN] Esegue manualmente tutti i controlli del Watchdog")
+@bot.tree.command(name="forcewatchdog", description="[ADMIN] Manually run all Watchdog checks")
 async def forcewatchdog(interaction: discord.Interaction):
     
     if interaction.user.id != ADMIN_USER_ID:
-        await interaction.response.send_message("❌ Solo l'admin può usare questo comando!", ephemeral=True)
+        await interaction.response.send_message("❌ Only admin can use this command!", ephemeral=True)
         return
 
     try:
@@ -1997,8 +1997,8 @@ async def forcewatchdog(interaction: discord.Interaction):
         report = await bot.run_watchdog_checks(report_channel=True)
         
         embed = discord.Embed(
-            title="🐕 Watchdog Manuale",
-            description=f"**Report Esecuzione Forzata:**\n\n{report}",
+            title="🐕 Manual Watchdog",
+            description=f"**Forced Execution Report:**\n\n{report}",
             color=0xFFA500, 
             timestamp=datetime.utcnow()
         )
@@ -2006,16 +2006,16 @@ async def forcewatchdog(interaction: discord.Interaction):
         await interaction.followup.send(embed=embed, ephemeral=True)
         
     except Exception as e:
-        logger.error(f"❌ Errore comando forcewatchdog: {e}")
+        logger.error(f"❌ forcewatchdog command error: {e}")
         try:
-            await interaction.followup.send(f"❌ Errore critico: {str(e)}", ephemeral=True)
+            await interaction.followup.send(f"❌ Critical error: {str(e)}", ephemeral=True)
         except: pass
 
-@bot.tree.command(name="forceupdate", description="Forza l'aggiornamento di tutti i rank")
+@bot.tree.command(name="forceupdate", description="Force rank update for all users")
 async def forceupdate(interaction: discord.Interaction):
     
     if interaction.user.id != ADMIN_USER_ID:
-        await interaction.response.send_message("❌ Solo l'admin può usare questo comando!", ephemeral=True)
+        await interaction.response.send_message("❌ Only admin can use this command!", ephemeral=True)
         return
     
     try:
@@ -2023,36 +2023,36 @@ async def forceupdate(interaction: discord.Interaction):
         
         if bot.is_updating:
             
-            logger.warning("⚠️ Forceupdate chiamato con update già in corso. Forzo il reset della flag e procedo.")
+            logger.warning("⚠️ Forceupdate called with update already in progress. Forcing flag reset and proceeding.")
             bot.is_updating = False
             
         
         if not bot.channel:
-            await interaction.followup.send("❌ Impossibile trovare il canale configurato.", ephemeral=True)
+            await interaction.followup.send("❌ Unable to find configured channel.", ephemeral=True)
             return
         
         success = await bot.update_all_users()
         
         if success:
             try:
-                await interaction.followup.send("✅ Aggiornamento forzato completato con successo!", ephemeral=True)
+                await interaction.followup.send("✅ Forced update completed successfully!", ephemeral=True)
             except discord.HTTPException as e:
                 if e.status == 429 or "Too Many Requests" in str(e):
-                    logger.warning("⚠️ Rate limit su followup dopo forceupdate, skip messaggio")
+                    logger.warning("⚠️ Rate limit on followup after forceupdate, skip message")
                 elif "2000 or fewer" in str(e):
-                    await interaction.followup.send("✅ Aggiornamento completato!", ephemeral=True)
+                    await interaction.followup.send("✅ Update completed!", ephemeral=True)
                 else:
                     raise
         else:
-            await interaction.followup.send("❌ Aggiornamento forzato fallito. Controlla i log.", ephemeral=True)
+            await interaction.followup.send("❌ Forced update failed. Check logs.", ephemeral=True)
     
     except discord.NotFound:
-        logger.error("❌ Interaction scaduta durante forceupdate")
+        logger.error("❌ Interaction expired during forceupdate")
     except Exception as e:
-        logger.error(f"❌ Errore comando forceupdate: {e}")
+        logger.error(f"❌ forceupdate command error: {e}")
         try:
             
-            error_msg = f"❌ Errore durante l'aggiornamento: {str(e)[:100]}..."
+            error_msg = f"❌ Error during update: {str(e)[:100]}..."
             await interaction.followup.send(error_msg, ephemeral=True)
         except:
             pass
@@ -2061,13 +2061,13 @@ async def forceupdate(interaction: discord.Interaction):
         try:
             bot.restart_update_timer()
         except Exception as e:
-            logger.error(f"❌ Errore riavvio timer dopo forceupdate: {e}")
+            logger.error(f"❌ Timer restart error after forceupdate: {e}")
 
-@bot.tree.command(name="fastcodice", description="Forza controllo email immediato (ultime 24h)")
-async def fast_codice(interaction: discord.Interaction):
+@bot.tree.command(name="fastcode", description="Force immediate email check (last 24h)")
+async def fast_code(interaction: discord.Interaction):
     
     if interaction.user.id != ADMIN_USER_ID:
-        await interaction.response.send_message("❌ Solo l'admin può usare questo comando!", ephemeral=True)
+        await interaction.response.send_message("❌ Only admin can use this command!", ephemeral=True)
         return
     
     try:
@@ -2103,54 +2103,54 @@ async def fast_codice(interaction: discord.Interaction):
             await interaction.followup.send("❌ No *valid* code (max 15 min) found. Channel has been notified.", ephemeral=True)
         
     except discord.NotFound:
-        logger.error("❌ Interaction scaduta durante FastCodice")
+        logger.error("❌ Interaction expired during FastCodice")
     except Exception as e:
-        logger.error(f"❌ Errore comando FastCodice: {e}")
+        logger.error(f"❌ FastCodice command error: {e}")
         try:
             await interaction.followup.send(f"❌ Errore: {str(e)}", ephemeral=True)
         except:
             pass
 
-@bot.tree.command(name="status", description="Mostra lo stato del bot")
+@bot.tree.command(name="status", description="Show bot status")
 async def status(interaction: discord.Interaction):
     
     if interaction.user.id != ADMIN_USER_ID:
-        await interaction.response.send_message("❌ Solo l'admin può usare questo comando!", ephemeral=True)
+        await interaction.response.send_message("❌ Only admin can use this command!", ephemeral=True)
         return
     
     try:
         
         embed = discord.Embed(
-            title="🤖 Stato Bot Valorant",
+            title="🤖 Valorant Bot Status",
             color=0x00ff00,
             timestamp=datetime.utcnow()
         )
         
         
         embed.add_field(
-            name="📊 Generale", 
-            value=f"✅ Online\n🔄 Aggiornamento: {'In corso' if bot.is_updating else 'Idle'}", 
+            name="📊 General", 
+            value=f"✅ Online\n🔄 Update: {'In progress' if bot.is_updating else 'Idle'}", 
             inline=True
         )
         
         
         next_update_countdown = bot.get_next_update_countdown()
         embed.add_field(
-            name="⏰ Prossimo Update", 
+            name="⏰ Next Update", 
             value=f"{next_update_countdown}", 
             inline=True
         )
         
         
-        sync_status = "✅ Sincronizzati" if bot.commands_synced else "❌ Non sincronizzati"
+        sync_status = "✅ Synced" if bot.commands_synced else "❌ Not synced"
         embed.add_field(
-            name="⚡ Comandi Slash", 
+            name="⚡ Slash Commands", 
             value=sync_status, 
             inline=True
         )
         
         
-        session_status = "✅ Attiva" if bot.session and not getattr(bot.session, "closed", False) else "❌ Chiusa"
+        session_status = "✅ Active" if bot.session and not getattr(bot.session, "closed", False) else "❌ Closed"
         embed.add_field(
             name="🌐 Sessione HTTP", 
             value=session_status, 
@@ -2158,18 +2158,18 @@ async def status(interaction: discord.Interaction):
         )
         
         
-        email_status = "✅ Connesso" if bot.email_client else "❌ Disconnesso"
+        email_status = "✅ Connected" if bot.email_client else "❌ Disconnected"
         embed.add_field(
-            name="📧 Monitoraggio Email", 
+            name="📧 Email Monitoring", 
             value=email_status, 
             inline=True
         )
         
         
-        email_heartbeat = "Mai"
+        email_heartbeat = "Never"
         if bot.last_email_check_time > 0:
             secs_ago = int(time.time() - bot.last_email_check_time)
-            email_heartbeat = f"{secs_ago}s fa"
+            email_heartbeat = f"{secs_ago}s ago"
         
         embed.add_field(
             name="❤️ Email Heartbeat", 
@@ -2178,9 +2178,9 @@ async def status(interaction: discord.Interaction):
         )
         
         
-        update_task_status = "✅ Attivo" if bot.update_task and not bot.update_task.done() else "❌ Inattivo"
-        email_task_status = "✅ Attivo" if bot.email_task and not bot.email_task.done() else "❌ Inattivo"
-        watchdog_status = "✅ Attivo" if bot.watchdog_task and not bot.watchdog_task.done() else "❌ Inattivo"
+        update_task_status = "✅ Active" if bot.update_task and not bot.update_task.done() else "❌ Inactive"
+        email_task_status = "✅ Active" if bot.email_task and not bot.email_task.done() else "❌ Inactive"
+        watchdog_status = "✅ Active" if bot.watchdog_task and not bot.watchdog_task.done() else "❌ Inactive"
         
         embed.add_field(
             name="🔄 Task Status", 
@@ -2191,49 +2191,49 @@ async def status(interaction: discord.Interaction):
         
         cache_count = len(bot.message_cache)
         embed.add_field(
-            name="💾 Cache Messaggi", 
-            value=f"{cache_count} messaggi salvati", 
+            name="💾 Message Cache", 
+            value=f"{cache_count} messages saved", 
             inline=True
         )
         
         
         history_count = len(bot.codes_history)
         embed.add_field(
-            name="📚 History Codici", 
-            value=f"{history_count} salvati", 
+            name="📚 Code History", 
+            value=f"{history_count} saved", 
             inline=True
         )
         
         await interaction.response.send_message(embed=embed, ephemeral=True)
         
     except discord.NotFound:
-        logger.error("❌ Interaction scaduta durante status")
+        logger.error("❌ Interaction expired during status")
     except Exception as e:
-        logger.error(f"❌ Errore comando status: {e}")
+        logger.error(f"❌ status command error: {e}")
         try:
-            await interaction.response.send_message(f"❌ Errore durante il controllo stato: {str(e)}", ephemeral=True)
+            await interaction.response.send_message(f"❌ Error during status check: {str(e)}", ephemeral=True)
         except discord.NotFound:
-            logger.error("❌ Impossibile inviare risposta - interaction scaduta")
+            logger.error("❌ Unable to send response - interaction expired")
 
-@bot.tree.command(name="sendtest", description="[ADMIN] Invia un messaggio di test nel canale corrente")
+@bot.tree.command(name="sendtest", description="[ADMIN] Send a test message in current channel")
 async def sendtest(interaction: discord.Interaction):
     
     if interaction.user.id != ADMIN_USER_ID:
-        await interaction.response.send_message("❌ Solo l'admin può usare questo comando!", ephemeral=True)
+        await interaction.response.send_message("❌ Only admin can use this command!", ephemeral=True)
         return
 
     try:
         await interaction.channel.send(",")
-        await interaction.response.send_message("✅ Messaggio di test inviato!", ephemeral=True)
+        await interaction.response.send_message("✅ Test message sent!", ephemeral=True)
     except Exception as e:
-        logger.error(f"❌ Errore comando sendtest: {e}")
+        logger.error(f"❌ sendtest command error: {e}")
         await interaction.response.send_message(f"❌ Errore: {e}", ephemeral=True)
 
-@bot.tree.command(name="restart", description="Riavvia i task in background")
+@bot.tree.command(name="restart", description="Restart background tasks")
 async def restart(interaction: discord.Interaction):
     
     if interaction.user.id != ADMIN_USER_ID:
-        await interaction.response.send_message("❌ Solo l'admin può usare questo comando!", ephemeral=True)
+        await interaction.response.send_message("❌ Only admin can use this command!", ephemeral=True)
         return
     
     try:
@@ -2263,22 +2263,22 @@ async def restart(interaction: discord.Interaction):
         
         bot.start_background_tasks()
         
-        await interaction.followup.send("✅ Task in background riavviati con successo!", ephemeral=True)
+        await interaction.followup.send("✅ Background tasks restarted successfully!", ephemeral=True)
         
     except discord.NotFound:
-        logger.error("❌ Interaction scaduta durante restart")
+        logger.error("❌ Interaction expired during restart")
     except Exception as e:
-        logger.error(f"❌ Errore comando restart: {e}")
+        logger.error(f"❌ restart command error: {e}")
         try:
-            await interaction.followup.send(f"❌ Errore durante il restart: {str(e)}", ephemeral=True)
+            await interaction.followup.send(f"❌ Error during restart: {str(e)}", ephemeral=True)
         except discord.NotFound:
-            logger.error("❌ Impossibile inviare risposta - interaction scaduta")
+            logger.error("❌ Unable to send response - interaction expired")
 
-@bot.tree.command(name="sync", description="Risincronizza manualmente i comandi slash")
+@bot.tree.command(name="sync", description="Manually resync slash commands")
 async def sync_commands(interaction: discord.Interaction):
     
     if interaction.user.id != ADMIN_USER_ID:
-        await interaction.response.send_message("❌ Solo l'admin può usare questo comando!", ephemeral=True)
+        await interaction.response.send_message("❌ Only admin can use this command!", ephemeral=True)
         return
     
     try:
@@ -2286,32 +2286,32 @@ async def sync_commands(interaction: discord.Interaction):
         
         try:
             
-            logger.info("🔄 Sincronizzazione manuale globale...")
+            logger.info("🔄 Manual global sync...")
             synced = await bot.tree.sync()
             bot.commands_synced = True
-            await interaction.followup.send(f"✅ {len(synced)} comandi sincronizzati GLOBALMENTE! (Potrebbe richiedere fino a 1 ora per propagarsi ovunque)", ephemeral=True)
+            await interaction.followup.send(f"✅ {len(synced)} commands synced GLOBALLY! (May take up to 1 hour to propagate everywhere)", ephemeral=True)
         except discord.Forbidden:
-            await interaction.followup.send("❌ Permissions insufficienti per sincronizzare comandi", ephemeral=True)
+            await interaction.followup.send("❌ Insufficient permissions to sync commands", ephemeral=True)
         except Exception as sync_error:
-            await interaction.followup.send(f"❌ Errore sync: {str(sync_error)}", ephemeral=True)
+            await interaction.followup.send(f"❌ Sync error: {str(sync_error)}", ephemeral=True)
         
     except discord.NotFound:
-        logger.error("❌ Interaction scaduta durante sync")
+        logger.error("❌ Interaction expired during sync")
     except Exception as e:
-        logger.error(f"❌ Errore comando sync: {e}")
+        logger.error(f"❌ sync command error: {e}")
         try:
-            await interaction.followup.send(f"❌ Errore durante la sincronizzazione: {str(e)}", ephemeral=True)
+            await interaction.followup.send(f"❌ Error during sync: {str(e)}", ephemeral=True)
         except discord.NotFound:
-            logger.error("❌ Impossibile inviare risposta - interaction scaduta")
+            logger.error("❌ Unable to send response - interaction expired")
 
 
 if __name__ == "__main__":
     try:
-        logger.info("🚀 Avvio Bot Valorant Tracker...")
+        logger.info("🚀 Starting Valorant Tracker Bot...")
         bot.run(DISCORD_TOKEN)
     except KeyboardInterrupt:
-        logger.info("🛑 Bot fermato dall'utente")
+        logger.info("🛑 Bot stopped by user")
     except Exception as e:
-        logger.error(f"❌ Errore avvio bot: {e}")
+        logger.error(f"❌ Bot startup error: {e}")
     finally:
-        logger.info("🔄 Procedura di shutdown completata")
+        logger.info("🔄 Shutdown procedure completed")
