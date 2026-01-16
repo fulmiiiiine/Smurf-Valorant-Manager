@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Questo file contiene la documentazione completa del progetto in formato stringa Python.
-Puoi importarlo o eseguirlo direttamente per leggere le istruzioni.
-"""
+
 
 README_CONTENT = r"""
 # Valorant Tracker & 2FA Manager Bot 🔫
@@ -144,3 +140,4 @@ This project is open-source for educational purposes.
 
 if __name__ == "__main__":
     print(README_CONTENT)
+
