@@ -102,6 +102,7 @@ In `config.json`, the field `hardcoded_slot_ids` is used to persist messages acr
 1.  **First Run:** Leave them as `0`. The bot will send new messages for each tracked user.
 2.  **After First Run:** Copy the **Message IDs** of the generated cards from Discord.
 3.  **Update Config:** Paste these IDs into `hardcoded_slot_ids` in your `config.json`. This prevents the bot from spamming new messages every time it restarts.
+4.  **Remove the access of writing:** Remove the `Send Messages` Permission to the bot to avoid duplicates
 
 ## 🖥️ Usage
 
@@ -141,4 +142,5 @@ This project is open-source for educational purposes.
 * **Attribution Required:** If you use, fork, or modify this code for your own projects, videos, or repositories, you **MUST** provide clear credit and a link back to this repository.
 * **No Plagiarism:** Claiming this code as your own without proper attribution is strictly prohibited.
 * **Support:** If this project helped you, consider starring the repository ⭐.
+
 
