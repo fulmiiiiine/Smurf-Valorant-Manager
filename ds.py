@@ -2082,25 +2082,25 @@ async def fast_codice(interaction: discord.Interaction):
                 
                 bot.save_code_to_history(code)
                 await bot.send_code_to_discord(code)
-                await interaction.followup.send(f"✅ **Trovato e inviato!** Codice: `{code}`", ephemeral=True)
+                await interaction.followup.send(f"✅ **Found and sent!** Code: `{code}`", ephemeral=True)
             else:
-                await interaction.followup.send(f"⚠️ Codice trovato `{code}`, ma era già stato inviato (in History).", ephemeral=True)
+                await interaction.followup.send(f"⚠️ Code found `{code}`, but already sent (in History).", ephemeral=True)
         else:
             
             if bot.codes_channel:
                 
                 embed = discord.Embed(
-                    title="🚫 Nessun Codice Trovato",
-                    description="**porcodio bro non è arrivato niente**\n\nNessuna mail con codice valida nelle ultime 24h.",
+                    title="🚫 No Code Found",
+                    description="**No valid code found**\n\nNo email with valid code in the last 24h.",
                     color=0xFF0000, 
                     timestamp=datetime.utcnow()
                 )
-                embed.set_footer(text="Bot Codici Riot Games", icon_url="https://i.imgur.com/Mrn3y3V.png")
+                embed.set_footer(text="Riot Games Codes Bot", icon_url="https://i.imgur.com/Mrn3y3V.png")
                 embed.set_thumbnail(url="https://logos-world.net/wp-content/uploads/2020/10/Riot-Games-Logo.png")
                 
                 await bot.codes_channel.send(embed=embed)
                 
-            await interaction.followup.send("❌ Nessun codice *valido* (max 15 min) trovato. Ho avvisato il canale.", ephemeral=True)
+            await interaction.followup.send("❌ No *valid* code (max 15 min) found. Channel has been notified.", ephemeral=True)
         
     except discord.NotFound:
         logger.error("❌ Interaction scaduta durante FastCodice")
