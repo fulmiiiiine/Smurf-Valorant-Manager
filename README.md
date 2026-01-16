@@ -25,11 +25,7 @@ Designed to be hosted on cloud platforms (Render, Railway, Replit) or local serv
 | ![Rank Card](assets/card_preview.png) | ![Leaderboard](assets/leaderboard_preview.png) | ![Codes](assets/codes_preview.png) |
 | *Auto-generated dynamic cards* | *Live updating leaderboard* | *Instant 2FA forwarding* |
 
-> **Setup Instructions for Images:**
-> 1. Create a folder named `assets` in your repository.
-> 2. Upload your screenshot named `card_preview.png` inside it.
-> 3. Upload your screenshot named `leaderboard_preview.png` inside it.
-> 4. Upload your screenshot named `codes_preview.png` inside it.
+
 
 ## 🛠️ Prerequisites
 
@@ -145,3 +141,4 @@ This project is open-source for educational purposes.
 * **Attribution Required:** If you use, fork, or modify this code for your own projects, videos, or repositories, you **MUST** provide clear credit and a link back to this repository.
 * **No Plagiarism:** Claiming this code as your own without proper attribution is strictly prohibited.
 * **Support:** If this project helped you, consider starring the repository ⭐.
+
