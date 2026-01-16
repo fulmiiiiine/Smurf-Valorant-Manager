@@ -37,8 +37,8 @@ Before installing, ensure you have the following credentials ready. **Without th
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/YOUR_USERNAME/valorant-discord-tracker.git](https://github.com/YOUR_USERNAME/valorant-discord-tracker.git)
-   cd valorant-discord-tracker
+   git clone [https://github.com/fulmiiiiine/Smurf-Valorant-Manager.git](https://github.com/fulmiiiiine/Smurf-Valorant-Manager.git)
+   cd Smurf-Valorant-Manager
    ```
 
 2. **Install dependencies:**
@@ -133,9 +133,3 @@ This project is open-source for educational purposes.
 * **Attribution Required:** If you use, fork, or modify this code for your own projects, videos, or repositories, you **MUST** provide clear credit and a link back to this repository.
 * **No Plagiarism:** Claiming this code as your own without proper attribution is strictly prohibited.
 * **Support:** If this project helped you, consider starring the repository ⭐.
-"""
-
-if __name__ == "__main__":
-    print(README_CONTENT)
-
-
